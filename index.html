@@ -2,52 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Game Prototype</title>
+  <title>The War with Color Card</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h1>The War With Color Card </h1>
-    <p>A 1v1 prediction-based card combat prototype.</p>
-  </header>
+<header>
+  <h1>The War with Color Card</h1>
+  <p>A prediction-based color card combat prototype.</p>
+</header>
 
-  <section>
-    <h2>Core Concept</h2>
-    <p>
-      This game focuses on prediction, timing, and strategic decision-making.
-      Players choose cards, read opponent intent, and use different actions to gain advantage.
-    </p>
-  </section>
+<section class="intro">
+  <h2>Core Concept</h2>
+  <p>
+    Players submit commands with color cards. Red counters Blue, Blue counters Green,
+    and Green counters Red. Prediction points allow players to reveal and lock part
+    of the opponent's plan before resolution.
+  </p>
+</section>
 
-  <section>
-    <h2>Interactive Prototype</h2>
+<section class="game-box">
+  <h2>Interactive Prototype</h2>
 
-    <div class="game-box">
-      <h3>Enemy</h3>
-      <p>HP: <span id="enemyHp">100</span></p>
-      <p>Intent: <span id="enemyIntent">Unknown</span></p>
-
+  <div class="status-area">
+    <div class="status-card">
       <h3>Player</h3>
-      <p>HP: <span id="playerHp">100</span></p>
-
-      <button onclick="attack()">Attack Card</button>
-      <button onclick="defend()">Defense Card</button>
-      <button onclick="predict()">Prediction Card</button>
-
-      <p id="result">Choose a card to begin.</p>
+      <p>HP: <span id="playerHp">10</span></p>
+      <p>Stagger: <span id="playerStagger">3</span></p>
+      <p>Prediction Points: <span id="playerPrediction">3</span></p>
+      <p>Distance: <span id="distance">2</span>m</p>
     </div>
-  </section>
 
-  <section>
-    <h2>Design Goals</h2>
-    <ul>
-      <li>Create tension through hidden information.</li>
-      <li>Reward prediction and risk-taking.</li>
-      <li>Keep the interface clear and readable.</li>
-    </ul>
-  </section>
+    <div class="status-card">
+      <h3>Enemy</h3>
+      <p>HP: <span id="enemyHp">10</span></p>
+      <p>Stagger: <span id="enemyStagger">3</span></p>
+      <p>Hidden Command: <span id="enemyCommand">Unknown</span></p>
+      <p>Hidden Color: <span id="enemyColor">Unknown</span></p>
+    </div>
+  </div>
 
-  <script src="script.js"></script>
+  <div class="controls">
+    <h3>Choose Your Command</h3>
+
+    <label>Command:</label>
+    <select id="playerCommand">
+      <option value="Attack">Attack</option>
+      <option value="Dodge">Dodge</option>
+      <option value="Move Forward">Move Forward</option>
+      <option value="Move Backward">Move Backward</option>
+    </select>
+
+    <label>Color Card:</label>
+    <select id="playerColor">
+      <option value="Red">Red</option>
+      <option value="Blue">Blue</option>
+      <option value="Green">Green</option>
+    </select>
+
+    <div class="button-row">
+      <button onclick="predictEnemy()">Use Prediction</button>
+      <button onclick="resolveTurn()">Resolve Turn</button>
+      <button onclick="resetGame()">Reset Game</button>
+    </div>
+  </div>
+
+  <div class="log-box">
+    <h3>Combat Log</h3>
+    <p id="result">Choose a command and resolve the turn.</p>
+  </div>
+</section>
+
+<section class="rules">
+  <h2>Design Goals</h2>
+  <ul>
+    <li>Create tension through hidden commands.</li>
+    <li>Reward prediction and counter-play.</li>
+    <li>Keep the prototype readable and easy to test.</li>
+  </ul>
+</section>
+
+<script src="script.js"></script>
 </body>
 </html>
