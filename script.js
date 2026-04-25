@@ -8,13 +8,13 @@ let distance = 2;
 let selectedCard = null;
 
 const playerCards = [
-  { color: "Red", command: "Attack" },
-  { color: "Blue", command: "Dodge" },
-  { color: "Green", command: "Move Forward" },
-  { color: "Red", command: "Move Backward" },
-  { color: "Blue", command: "Attack" },
-  { color: "Green", command: "Dodge" },
-  { color: "Red", command: "Attack" }
+  { color: "Red" },
+  { color: "Red" },
+  { color: "Red" },
+  { color: "Blue" },
+  { color: "Blue" },
+  { color: "Green" },
+  { color: "Green" }
 ];
 
 let enemyPlan = [];
@@ -47,15 +47,27 @@ function renderPlayerHand() {
     }
 
     div.innerHTML = `
-      <h3>${card.color}</h3>
-      <p><strong>${card.command}</strong></p>
-      <p>Click to select</p>
+      <h3>${card.color} Card</h3>
+
+      <select class="command-select" id="command-${index}" onclick="event.stopPropagation()">
+        <option value="Attack">Attack</option>
+        <option value="Dodge">Dodge</option>
+        <option value="Move Forward">Move Forward</option>
+        <option value="Move Backward">Move Backward</option>
+      </select>
+
+      <p>Click card to select</p>
     `;
 
     div.onclick = function () {
       selectedCard = index;
+
+      const chosenCommand = document.getElementById(`command-${index}`).value;
+      playerCards[index].command = chosenCommand;
+
       document.getElementById("selectedCard").textContent =
-        `${card.color} ${card.command} selected.`;
+        `${card.color} ${chosenCommand} selected.`;
+
       renderPlayerHand();
     };
 
@@ -118,6 +130,11 @@ function resolveTurn() {
   }
 
   const player = playerCards[selectedCard];
+
+  if (!player.command) {
+    player.command = "Attack";
+  }
+
   const enemy = enemyPlan[0];
 
   let log = `You played ${player.color} ${player.command}. `;
@@ -184,11 +201,7 @@ function applyCommand(card, owner) {
   }
 
   if (card.command === "Dodge") {
-    if (owner === "player") {
-      distance = Math.min(5, distance + 1);
-    } else {
-      distance = Math.min(5, distance + 1);
-    }
+    distance = Math.min(5, distance + 1);
   }
 
   if (card.command === "Move Forward") {
@@ -222,13 +235,17 @@ function resetGame() {
   distance = 2;
   selectedCard = null;
 
+  playerCards.forEach(card => {
+    card.command = undefined;
+  });
+
   createEnemyPlan();
   updateUI();
   renderPlayerHand();
   renderEnemySlots();
 
   document.getElementById("selectedCard").textContent = "No card selected.";
-  writeLog("Game reset. Select a card to begin.");
+  writeLog("Game reset. Select a color card and assign a command.");
 }
 
 createEnemyPlan();
