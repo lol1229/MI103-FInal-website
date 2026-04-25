@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Your Game Title</h1>
+    <p>A 1v1 prediction-based card combat prototype.</p>
+  </header>
+
+  <section>
+    <h2>Core Concept</h2>
+    <p>
+      This game focuses on prediction, timing, and strategic decision-making.
+      Players choose cards, read opponent intent, and use different actions to gain advantage.
+    </p>
+  </section>
+
+  <section>
+    <h2>Interactive Prototype</h2>
+
+    <div class="game-box">
+      <h3>Enemy</h3>
+      <p>HP: <span id="enemyHp">100</span></p>
+      <p>Intent: <span id="enemyIntent">Unknown</span></p>
+
+      <h3>Player</h3>
+      <p>HP: <span id="playerHp">100</span></p>
+
+      <button onclick="attack()">Attack Card</button>
+      <button onclick="defend()">Defense Card</button>
+      <button onclick="predict()">Prediction Card</button>
+
+      <p id="result">Choose a card to begin.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Design Goals</h2>
+    <ul>
+      <li>Create tension through hidden information.</li>
+      <li>Reward prediction and risk-taking.</li>
+      <li>Keep the interface clear and readable.</li>
+    </ul>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
