@@ -1,20 +1,20 @@
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
+  font-family: Arial, sans-serif;
   background: #f4f1ea;
   color: #222;
 }
 
 header {
-  padding: 50px;
-  text-align: center;
-  background: #222;
+  background: #1f1f1f;
   color: white;
+  text-align: center;
+  padding: 40px;
 }
 
 section {
-  max-width: 800px;
-  margin: 40px auto;
+  max-width: 900px;
+  margin: 30px auto;
   padding: 20px;
 }
 
@@ -22,12 +22,61 @@ section {
   background: white;
   border: 2px solid #222;
   border-radius: 16px;
-  padding: 24px;
+}
+
+.status-area {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.status-card {
+  flex: 1;
+  background: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.controls {
+  background: #eee;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+select {
+  padding: 8px;
+  margin-top: 5px;
+  width: 200px;
+}
+
+.button-row {
+  margin-top: 20px;
 }
 
 button {
-  margin: 8px;
-  padding: 12px 18px;
-  border-radius: 10px;
+  padding: 10px 16px;
+  margin-right: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #222;
+  color: white;
   cursor: pointer;
+}
+
+button:hover {
+  background: #444;
+}
+
+.log-box {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f9f9f9;
+  border-left: 5px solid #222;
 }
