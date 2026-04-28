@@ -43,7 +43,9 @@
   <section class="panel">
     <h2>Your Color Cards</h2>
     <p class="hint">Choose a command for each color card, then click one card to play it.</p>
+    <div id="queuedCards" class="queue-row"></div>
     <div id="playerHand" class="card-row"></div>
+    <button class="button-row" onclick="queueCard()">Queue Card</button>
   </section>
 
   <section class="panel">
@@ -52,7 +54,7 @@
 
     <div class="button-row">
       <button onclick="usePrediction()">Use Prediction</button>
-      <button onclick="resolveTurn()">Resolve Turn</button>
+      <button id="resolveTurn" onclick="resolveTurn()">Resolve Turn</button>
       <button onclick="resetGame()">Reset</button>
     </div>
   </section>

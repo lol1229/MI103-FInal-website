@@ -7,21 +7,35 @@ let distance = 2;
 
 let selectedCard = null;
 
-const playerCards = [
-  { color: "Red" },
-  { color: "Red" },
-  { color: "Red" },
-  { color: "Blue" },
-  { color: "Blue" },
-  { color: "Green" },
-  { color: "Green" }
+let playerCards = [
+  { color: "Red", command: "Attack" },
+  { color: "Red", command: "Attack" },
+  { color: "Red", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Green", command: "Attack" },
+  { color: "Green", command: "Attack" }
 ];
+
+const startingHand = [  
+  { color: "Red", command: "Attack" },
+  { color: "Red", command: "Attack" },
+  { color: "Red", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Green", command: "Attack" },
+  { color: "Green", command: "Attack" }
+];
+
+let queuedCards = [];
+
 
 let enemyPlan = [];
 
+const colors = ["Red", "Blue", "Green"];
+const commands = ["Attack", "Dodge", "Move Forward", "Move Backward"];
+
 function createEnemyPlan() {
-  const colors = ["Red", "Blue", "Green"];
-  const commands = ["Attack", "Dodge", "Move Forward", "Move Backward"];
 
   enemyPlan = [];
 
@@ -29,7 +43,7 @@ function createEnemyPlan() {
     enemyPlan.push({
       color: colors[Math.floor(Math.random() * colors.length)],
       command: commands[Math.floor(Math.random() * commands.length)],
-      revealed: false
+      revealed: true
     });
   }
 }
@@ -37,6 +51,11 @@ function createEnemyPlan() {
 function renderPlayerHand() {
   const hand = document.getElementById("playerHand");
   hand.innerHTML = "";
+
+  if (queuedCards.length === 0) {
+    playerCards = [];
+    startingHand.forEach(card => playerCards.push({ ...card }));
+  }
 
   playerCards.forEach((card, index) => {
     const div = document.createElement("div");
@@ -73,6 +92,44 @@ function renderPlayerHand() {
 
     hand.appendChild(div);
   });
+}
+
+function queueCard() {
+  if (selectedCard === null) {
+    writeLog("Select a card to queue first.");
+    return;
+  }
+
+  if (queuedCards.length >= 5) {
+    writeLog("You have queued 5 cards. Resolve the turn.");
+    return;
+  }
+  queuedCards.push(playerCards[selectedCard]);
+  playerCards.splice(selectedCard, 1);
+  selectedCard = null;
+
+  renderPlayerHand();
+  renderQueuedCards();
+}
+
+function renderQueuedCards() {
+  const queue = document.getElementById("queuedCards");
+  queue.innerHTML = "";
+
+  queuedCards.forEach((card, index) => {
+    const div = document.createElement("div");
+    div.className = `card ${card.color.toLowerCase()}`;
+    div.innerHTML = `
+      <h3>${card.color} Card</h3>
+      <p>${card.command}</p>
+    `;
+    queue.appendChild(div);
+  });
+}
+
+function resetPlayerHand() {
+  playerCards.length = 0;
+  startingHand.forEach(card => playerCards.push({ ...card }));
 }
 
 function renderEnemySlots() {
@@ -124,16 +181,14 @@ function usePrediction() {
 }
 
 function resolveTurn() {
-  if (selectedCard === null) {
-    writeLog("Choose one card from your hand first.");
-    return;
+  if (document.getElementById("resolveTurn").textContent === "Resolve Turn") {
+    if (queuedCards.length < 5) {
+      writeLog("Please queue 5 cards to resolve the turn.");
+      return;
+    }
   }
 
-  const player = playerCards[selectedCard];
-
-  if (!player.command) {
-    player.command = "Attack";
-  }
+  const player = queuedCards[0];
 
   const enemy = enemyPlan[0];
 
@@ -163,6 +218,7 @@ function resolveTurn() {
   }
 
   enemyPlan.shift();
+  queuedCards.shift();
 
   if (enemyPlan.length === 0) {
     createEnemyPlan();
@@ -173,8 +229,19 @@ function resolveTurn() {
 
   updateUI();
   renderPlayerHand();
+  renderQueuedCards();
   renderEnemySlots();
   writeLog(log);
+  changeResolveButton();
+}
+
+function changeResolveButton() {
+  const turnButton = document.getElementById("resolveTurn");
+  if (queuedCards.length === 0) {
+    turnButton.textContent = "Resolve Turn";
+  } else {
+    turnButton.textContent = "Continue Round";
+  }
 }
 
 function checkCounter(playerColor, enemyColor) {
