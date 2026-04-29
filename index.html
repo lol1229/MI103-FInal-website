@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>The War with Color Card</title>
+  <title>Color War</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header>
-  <h1>The War with Color Card</h1>
+  <h1>Color War</h1>
+  <p><a href="info.html">About this game</a></p>
   <p>A prediction-based tactical color card combat prototype</p>
 </header>
 
 <main>
-  <section class="panel">
-    <h2>Enemy Plan</h2>
+  <section class="enemy-panel">
+    <h2>Enemy Plan:</h2>
     <p class="hint">Use Prediction to reveal one enemy segment.</p>
     <div id="enemySlots" class="card-row"></div>
   </section>
@@ -40,16 +41,20 @@
     </div>
   </section>
 
-  <section class="panel">
+  <section class="player-panel">
     <h2>Your Color Cards</h2>
-    <p class="hint">Choose a command for each color card, then click one card to play it.</p>
+    <p class="hint">Choose a command for each color, then click a card to queue it.</p>
     <div id="queuedCards" class="queue-row"></div>
     <div id="playerHand" class="card-row"></div>
-    <button class="button-row" onclick="queueCard()">Queue Card</button>
+    <button class="queue-button" onclick="queueCard()">Queue Card</button>
   </section>
 
-  <section class="panel">
-    <h2>Selected Command</h2>
+  <section class="command-panel">
+    <p class="command-hint">Select a command for each card.</p>
+    <div id="colorCommands"></div>
+  </section>
+
+  <section class="selection-panel">
     <div id="selectedCard" class="selected-box">No card selected.</div>
 
     <div class="button-row">

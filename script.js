@@ -1,9 +1,12 @@
+// You need to make dodging work for same color interactions, try and limit one type of command to one color, and try and add the combo system! Good luck bro :D
+
 let playerHp = 10;
 let enemyHp = 10;
 let playerStagger = 3;
 let enemyStagger = 3;
 let prediction = 3;
 let distance = 2;
+let turnResolved = false;
 
 let selectedCard = null;
 
@@ -27,8 +30,13 @@ const startingHand = [
   { color: "Green", command: "Attack" }
 ];
 
-let queuedCards = [];
+let colorCommands = {
+  Red: "Attack",
+  Blue: "Attack",
+  Green: "Attack"
+};
 
+let queuedCards = [];
 
 let enemyPlan = [];
 
@@ -65,33 +73,96 @@ function renderPlayerHand() {
       div.classList.add("selected");
     }
 
+    const command = colorCommands[card.color];
     div.innerHTML = `
-      <h3>${card.color} Card</h3>
 
-      <select class="command-select" id="command-${index}" onclick="event.stopPropagation()">
-        <option value="Attack">Attack</option>
-        <option value="Dodge">Dodge</option>
-        <option value="Move Forward">Move Forward</option>
-        <option value="Move Backward">Move Backward</option>
-      </select>
-
-      <p>Click card to select</p>
+      <p><strong>${command}</strong></p>
     `;
 
     div.onclick = function () {
       selectedCard = index;
-
-      const chosenCommand = document.getElementById(`command-${index}`).value;
-      playerCards[index].command = chosenCommand;
-
-      document.getElementById("selectedCard").textContent =
-        `${card.color} ${chosenCommand} selected.`;
-
+      
+      const selectedCardDiv = document.getElementById("selectedCard");
+      selectedCardDiv.innerHTML = ""; // Clear previous content
+      
+      if (command === "Attack") {
+        const img = document.createElement("img");
+        img.src = "attack_command.png";
+        img.style.maxWidth = "10%";
+        img.style.height = "auto";
+        selectedCardDiv.appendChild(img);
+      } else if (command === "Dodge") {
+        const img = document.createElement("img");
+        img.src = "dodge_command.png";
+        img.style.maxWidth = "10%";
+        img.style.height = "auto";
+        selectedCardDiv.appendChild(img);
+        } else if (command === "Move Forward" || command === "Move Backward") {
+          const img = document.createElement("img");
+          img.src = "move_command.png";
+          img.style.maxWidth = "10%";
+          img.style.height = "auto";
+          selectedCardDiv.appendChild(img);
+        }
+        else {
+        selectedCardDiv.textContent = `${card.color} ${command} selected.`;
+      }
+      
       renderPlayerHand();
     };
 
     hand.appendChild(div);
   });
+}
+
+function renderColorCommands() {
+  const commandsContainer = document.getElementById("colorCommands");
+  commandsContainer.innerHTML = ""; // Clear existing content
+  
+  const container = document.createElement("div");
+  container.className = "color-commands";
+  container.style.marginBottom = "20px";
+
+  colors.forEach(color => {
+    const label = document.createElement("label");
+    label.style.marginRight = "20px";
+    label.innerHTML = `
+      ${color}: 
+      <select id="command-${color}" onchange="updateColorCommand('${color}')">
+        <option value="Attack" ${colorCommands[color] === "Attack" ? "selected" : ""}>Attack</option>
+        <option value="Dodge" ${colorCommands[color] === "Dodge" ? "selected" : ""}>Dodge</option>
+        <option value="Move Forward" ${colorCommands[color] === "Move Forward" ? "selected" : ""}>Move Forward</option>
+        <option value="Move Backward" ${colorCommands[color] === "Move Backward" ? "selected" : ""}>Move Backward</option>
+      </select>
+    `;
+    container.appendChild(label);
+  });
+
+  if (turnResolved) {
+    container.style.display = "none";
+    document.getElementsByClassName("command-hint")[0].textContent = "All commands are set.";
+  }
+  else {
+    container.style.display = "block";
+    document.getElementsByClassName("command-hint")[0].textContent = "Select a command for each card.";
+
+  }
+
+  commandsContainer.appendChild(container);
+}
+
+function updateColorCommand(color) {
+  const newCommand = document.getElementById(`command-${color}`).value;
+  colorCommands[color] = newCommand;
+  
+  playerCards.forEach(card => {
+    if (card.color === color) {
+      card.command = newCommand;
+    }
+  });
+
+  renderPlayerHand();
+  renderQueuedCards();
 }
 
 function queueCard() {
@@ -104,6 +175,12 @@ function queueCard() {
     writeLog("You have queued 5 cards. Resolve the turn.");
     return;
   }
+
+  if(document.getElementById("resolveTurn").textContent === "Continue Round") {
+    writeLog("You must finish the current round first!");
+    return;
+  }
+
   queuedCards.push(playerCards[selectedCard]);
   playerCards.splice(selectedCard, 1);
   selectedCard = null;
@@ -120,8 +197,7 @@ function renderQueuedCards() {
     const div = document.createElement("div");
     div.className = `card ${card.color.toLowerCase()}`;
     div.innerHTML = `
-      <h3>${card.color} Card</h3>
-      <p>${card.command}</p>
+      <p><strong>${colorCommands[card.color]}</strong></p>
     `;
     queue.appendChild(div);
   });
@@ -143,8 +219,7 @@ function renderEnemySlots() {
       div.className = `card ${card.color.toLowerCase()}`;
       div.innerHTML = `
         <h3>Slot ${index + 1}</h3>
-        <p><strong>${card.color}</strong></p>
-        <p>${card.command}</p>
+        <p><strong>${card.command}</strong></p>
       `;
     } else {
       div.className = "card hidden";
@@ -192,8 +267,8 @@ function resolveTurn() {
 
   const enemy = enemyPlan[0];
 
-  let log = `You played ${player.color} ${player.command}. `;
-  log += `Enemy played ${enemy.color} ${enemy.command}. `;
+  let log = `You played ${player.color} ${colorCommands[player.color]}. `;
+  log += `Enemy played ${enemy.color} ${colorCommands[enemy.color]}. `;
 
   const result = checkCounter(player.color, enemy.color);
 
@@ -203,6 +278,12 @@ function resolveTurn() {
   } else if (result === "enemy") {
     log += "Enemy color countered you. Your command is canceled. ";
     applyCommand(enemy, "enemy");
+  } else if (result === "player-staggered") {
+    log += "You have been staggered! Your command is canceled.";
+    applyCommand(enemy, "enemy");
+  } else if (result === "enemy-staggered") {
+    log += "The enemy has been staggered! Enemy command is canceled. ";
+    applyCommand(player, "player");
   } else {
     log += "No color counter. Both commands resolve. ";
     applyCommand(player, "player");
@@ -231,6 +312,7 @@ function resolveTurn() {
   renderPlayerHand();
   renderQueuedCards();
   renderEnemySlots();
+  renderColorCommands();
   writeLog(log);
   changeResolveButton();
 }
@@ -239,42 +321,78 @@ function changeResolveButton() {
   const turnButton = document.getElementById("resolveTurn");
   if (queuedCards.length === 0) {
     turnButton.textContent = "Resolve Turn";
+    turnResolved = false;
+    renderColorCommands();
   } else {
     turnButton.textContent = "Continue Round";
+    turnResolved = true;
+    renderColorCommands();
   }
 }
 
 function checkCounter(playerColor, enemyColor) {
-  if (playerColor === "Red" && enemyColor === "Blue") return "player";
-  if (playerColor === "Blue" && enemyColor === "Green") return "player";
-  if (playerColor === "Green" && enemyColor === "Red") return "player";
+  if (playerStagger <= 0) {
+    playerStagger = 3;
+    return "player-staggered";
+  }
+  if (enemyStagger <= 0) {
+    enemyStagger = 3;
+    return "enemy-staggered";
+  }
+  else {
+    if (playerColor === "Red" && enemyColor === "Blue") return "player";
+    if (playerColor === "Blue" && enemyColor === "Green") return "player";
+    if (playerColor === "Green" && enemyColor === "Red") return "player";
 
-  if (enemyColor === "Red" && playerColor === "Blue") return "enemy";
-  if (enemyColor === "Blue" && playerColor === "Green") return "enemy";
-  if (enemyColor === "Green" && playerColor === "Red") return "enemy";
+    if (enemyColor === "Red" && playerColor === "Blue") return "enemy";
+    if (enemyColor === "Blue" && playerColor === "Green") return "enemy";
+    if (enemyColor === "Green" && playerColor === "Red") return "enemy";
 
-  return "none";
+    return "none";
+  }
 }
 
 function applyCommand(card, owner) {
-  if (card.command === "Attack") {
-    if (distance <= 3) {
-      if (owner === "player") {
+  const enemy = enemyPlan[0];
+  const player = queuedCards[0];
+  
+  if (owner === "player") {
+    if (colorCommands[card.color] === "Attack") {
+      if (distance <= 3) {
         enemyHp--;
-      } else {
-        playerHp--;
+        enemyStagger--;
       }
+    }
+    if (colorCommands[card.color] === "Dodge") {
+      if (distance <= 3) {
+        if (enemy.command === "Attack") {
+          enemyStagger--;
+        }
+      }
+      distance = Math.min(5, distance + 1);
     }
   }
 
-  if (card.command === "Dodge") {
-    distance = Math.min(5, distance + 1);
+  if (owner === "enemy") {
+    if (card.command === "Attack") {
+      if (distance <= 3) {
+        playerHp--;
+        playerStagger--;
+      }
+    }
+    if (card.command === "Dodge") {
+      if (distance <= 3) {
+        if (colorCommands[player.color] === "Attack") {
+          playerStagger--;
+        }
+      }
+      distance = Math.min(5, distance + 1);
+    }
   }
 
   if (card.command === "Move Forward") {
     distance = Math.max(0, distance - 1);
   }
-
   if (card.command === "Move Backward") {
     distance = Math.min(5, distance + 1);
   }
@@ -301,21 +419,31 @@ function resetGame() {
   prediction = 3;
   distance = 2;
   selectedCard = null;
+  turnResolved = false;
+
+  colorCommands = {
+    Red: "Attack",
+    Blue: "Attack",
+    Green: "Attack"
+  };
 
   playerCards.forEach(card => {
-    card.command = undefined;
+    card.command = colorCommands[card.color];
   });
+  queuedCards = [];
 
   createEnemyPlan();
   updateUI();
   renderPlayerHand();
   renderEnemySlots();
-
+  renderQueuedCards();
   document.getElementById("selectedCard").textContent = "No card selected.";
-  writeLog("Game reset. Select a color card and assign a command.");
+
+  writeLog("Game reset.");
 }
 
 createEnemyPlan();
 renderPlayerHand();
 renderEnemySlots();
 updateUI();
+renderColorCommands();

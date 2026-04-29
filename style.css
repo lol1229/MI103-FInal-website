@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #efe8dc;
+  background: #1F1339;
   color: #222;
 }
 
@@ -28,6 +28,49 @@ main {
   padding: 0 20px;
 }
 
+.enemy-panel {
+  background: linear-gradient(135deg, #070000, #5a0303);
+  border: 7px solid #f50101;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 
+  8px 8px 0px #BC313E, 
+  16px 16px 0px #4C1B3B;
+  color: #FFD700;
+}
+
+.player-panel {
+  background: linear-gradient(180deg, #b2f1ff, #5555b7, #03102f);
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.command-panel {
+  background: white;
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+#command {
+  color: red
+}
+
+.selection-panel {
+  background: white;
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
 .panel {
   background: white;
   border: 2px solid #222;
@@ -38,8 +81,13 @@ main {
 }
 
 .hint {
-  color: #666;
-  font-size: 14px;
+  color: white;
+  font-size: 20px;
+}
+
+.command-hint {
+  color: black;
+  font-size: 20px;
 }
 
 .card-row {
@@ -47,18 +95,34 @@ main {
   gap: 14px;
   flex-wrap: wrap;
   margin-top: 16px;
+  color: #222
+}
+
+.queue-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  color: #222
+}
+
+.command-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  color: #222
+  items-center;
 }
 
 .card {
   width: 130px;
   height: 190px;
-  border-radius: 16px;
-  border: 3px solid #222;
   padding: 12px;
   box-sizing: border-box;
   background: #fafafa;
   cursor: pointer;
-  transition: 0.2s;
+  transition: .2s;
 }
 
 .card:hover {
@@ -70,8 +134,8 @@ main {
 }
 
 .card.hidden {
-  background: #222;
-  color: white;
+  background: #b4b4b4;
+  color: #f92228;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,29 +144,30 @@ main {
 
 .card h3 {
   margin: 0 0 12px 0;
+  text-align: center;
 }
 
 .card p {
   margin: 6px 0;
+  text-align: center;
 }
 
 .red {
-  background: #ffd6d6;
+  background-image: url('red_card.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .blue {
-  background: #d6e4ff;
+  background-image: url('blue_card.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .green {
-  background: #d9f5d6;
-}
-
-.command-select {
-  width: 100%;
-  margin-top: 12px;
-  padding: 6px;
-  border-radius: 8px;
+  background-image: url('green_card.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .battlefield {
@@ -154,6 +219,16 @@ button {
   padding: 12px 18px;
   border-radius: 10px;
   margin-right: 10px;
+  cursor: pointer;
+}
+
+.queue-button {
+  background: #5555b7;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-top: 10px;
   cursor: pointer;
 }
 
