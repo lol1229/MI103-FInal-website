@@ -1,25 +1,41 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #efe8dc;
+  background: #1F1339;
   color: #222;
 }
 
 header {
   text-align: center;
-  background: #1e1e1e;
+  background: #000000;
   color: white;
   padding: 36px 20px;
 }
 
 header h1 {
   margin: 0;
-  font-size: 36px;
+  font-size: 72px;
+  font-family: "Pixelify Sans", sans-serif;
+  color: #88ff55
 }
 
 header p {
   margin-top: 10px;
   color: #ddd;
+}
+
+header h3 {
+  margin-top: 10px;
+  color: #ccc;
+}
+
+a {
+  color: blue;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 main {
@@ -28,8 +44,63 @@ main {
   padding: 0 20px;
 }
 
+.enemy-panel {
+  background: linear-gradient(135deg, #070000, #5a0303);
+  border: 7px solid #f50101;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 
+  8px 8px 0px #BC313E, 
+  16px 16px 0px #4C1B3B;
+  color: #FFD700;
+}
+
+.enemy-panel h1 {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 36px;
+  margin: 0;
+}
+
+.player-panel {
+  background: linear-gradient(180deg, #b2f1ff, #5555b7, #03102f);
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.player-panel h1 {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 36px;
+  margin: 0;
+}
+
+.command-panel {
+  background: #fff9e8;
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
+}
+
+.selection-panel {
+  background: #fff9e8;
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
+}
+
 .panel {
-  background: white;
+  background: #fff9e8;
   border: 2px solid #222;
   border-radius: 18px;
   padding: 22px;
@@ -38,8 +109,13 @@ main {
 }
 
 .hint {
-  color: #666;
-  font-size: 14px;
+  color: white;
+  font-size: 20px;
+}
+
+.command-hint {
+  color: black;
+  font-size: 20px;
 }
 
 .card-row {
@@ -47,18 +123,25 @@ main {
   gap: 14px;
   flex-wrap: wrap;
   margin-top: 16px;
+  color: #222
+}
+
+.queue-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  color: #222
 }
 
 .card {
   width: 130px;
   height: 190px;
-  border-radius: 16px;
-  border: 3px solid #222;
   padding: 12px;
   box-sizing: border-box;
   background: #fafafa;
   cursor: pointer;
-  transition: 0.2s;
+  transition: .2s;
 }
 
 .card:hover {
@@ -70,8 +153,8 @@ main {
 }
 
 .card.hidden {
-  background: #222;
-  color: white;
+  background: #b4b4b4;
+  color: #f92228;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,29 +163,30 @@ main {
 
 .card h3 {
   margin: 0 0 12px 0;
+  text-align: center;
 }
 
 .card p {
   margin: 6px 0;
+  text-align: center;
 }
 
 .red {
-  background: #ffd6d6;
+  background-image: url('red_card.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .blue {
-  background: #d6e4ff;
+  background-image: url('blue_card.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .green {
-  background: #d9f5d6;
-}
-
-.command-select {
-  width: 100%;
-  margin-top: 12px;
-  padding: 6px;
-  border-radius: 8px;
+  background-image: url('green_card.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .battlefield {
@@ -113,32 +197,85 @@ main {
   gap: 20px;
 }
 
-.fighter {
+.player-fighter {
   flex: 1;
-  background: white;
-  border: 2px solid #222;
+  background: linear-gradient(90deg, #ffde59, #ff914d);
   border-radius: 18px;
   padding: 22px;
   text-align: center;
+  box-shadow: 
+  6px 6px 0px #FF00FF,
+  -6px -6px 0px #00FFFF;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
+}
+
+#playerHp {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#enemyHp {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#playerStagger {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#enemyStagger {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#prediction {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.enemy-fighter {
+  flex: 1;
+  background: linear-gradient(90deg, black, #c89116);
+  border-radius: 18px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 
+  6px 6px 0px #FF00FF,
+  -6px -6px 0px #00FFFF;
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
 }
 
 .distance-box {
   width: 160px;
-  background: #222;
-  color: white;
+  background: white;
+  color: black;
   border-radius: 18px;
   text-align: center;
   padding: 24px;
+  box-shadow: 
+  6px 6px 0px #FF00FF,
+  -6px -6px 0px #00FFFF;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
 }
 
 .distance-box strong {
+  font-family: "arial", sans-serif;
   font-size: 36px;
 }
 
 .selected-box {
   min-height: 50px;
-  background: #f6f6f6;
-  border-left: 6px solid #222;
+  background: #fff9e8;
   padding: 16px;
   margin-top: 12px;
 }
@@ -157,6 +294,16 @@ button {
   cursor: pointer;
 }
 
+.queue-button {
+  background: #5555b7;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
 button:hover {
   background: #444;
 }
@@ -165,6 +312,40 @@ button:hover {
   background: #fff9e8;
 }
 
+.log-panel h2 {
+  margin: 0;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 24px;
+}
+
 #log {
   line-height: 1.6;
+}
+
+.info-page {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+  background: #f0f0f0;
+  color: #333;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff9e8;
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 11px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  width: 50%;
+  text-align: center;
+  font-size: 20px;
+}
+
+li {
+  margin-bottom: 10px;
 }
