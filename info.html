@@ -1,53 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="info-page">
 
-    <div class="title">
-        <h1>Instruction Page</h1>
-        <p>Thank you for playing Color War! Here you can learn the rules of the game so you can decimate your opponents through tactical precision.</p>
-    </div>
+  <div class="section">
+    <h1>Instruction Page</h1>
+    <p>Thank you for playing Color War! Here you can learn the rules of the game so you can decimate your opponents through tactical precision.</p>
+  </div>
 
-    <div class="section">
-        <h2>How to Play</h2>
-        <p>This is a 1 vs 1 card game between two players. The goal of the game is to reduce your opponent's hp to zero.</p>
-    </div>
+  <div class="section">
+    <h2>How to Play</h2>
+    <p>This is a 1 vs 1 card game between two players. The goal of the game is to reduce your opponent's hp to zero.</p>
+  </div>
 
-    <div class="section">
-        <h2>Cards and Commands</h2>
-        <p>Cards come in 3 different colors, and you can have up to 3 of each color. Both players have 7 cards in their deck, and queue up 5 of them every turn. Combat will then occur, with each player's card taking effect in the order they queued at the same time. Your cards are then returned to you.</p>
-        <p>Each color can be assigned one of three commands: Attack, Dodge, or Move(either forward or backward). A command gets assigned to EVERY card of that color.</p>
-    </div>
+  <div class="section">
 
-    <div class="section">
-        <h2>Color Quirks</h2>
-        <h3>Effectiveness</h3>
-        <p>You may be asking, "what's the point of the colors?" Taking inspiration from fighting games, the colors have an effectiveness system:</p>
-        <!--Make it so that the text is the same color that it says!-->
-        <p>Red beats Green</p>
-        <p>Green beats Blue</p>
-        <p>Blue beats Green</p>
-        <p>If your card gets beaten by another color, that card's command gets completely CANCELED for that interaction, leaving you actionless. Take your opponent's deck into consideration when queueing your cards and use effectiveness to your advantage!</p>
-        <h3>Combos</h3>
-        <p>When you play 3 attacks in a row, you get a special effect depending on what color was played:</p>
-        <p>3 red cards will do extra damage</p>
-        <p>3 blue cards will give you extra stagger points</p>
-        <p>3 green cards will give you extra prediction points</p>
-        <p>Going for combos can be risky as they leave you open to get countered, but the payoff can be worth it, especially since the combo triggers even if one of your cards in the combo were canceled!</p>
+    <h2>Cards and Commands</h2>
+    <p>Cards come in 3 different colors, and you can have up to 3 of each color. Both players have 7 cards in their deck, and queue up 5 of them every turn. Combat will then occur, with each player's card taking effect in the order they queued at the same time. Your cards are then returned to you.</p>
+    <p>Each color can be assigned one of three commands: Attack, Dodge, or Move(either forward or backward). A command gets assigned to EVERY card of that color.</p>
 
-    </div>
+    <h2>Predictions</h2>
+    <p>Players can use prediction points in order to check the cards their opponent is playing for that turn. The cards are revealed in order, and return to being hidden after that round.</p>
 
-    <div class="limitations">
-        <h2>Limitations</h2>
-        <!--<p>this is where you'll talk about limitations of the tech demo, like the minimalistic AI, set cards, single weapon, etc. </p>-->
-    </div>
+  </div>
 
-    <a href="index.html">CLICK HERE!!!</a>
+  <div class="section">
+    <h2>Color Quirks</h2>
+
+    <h3>Effectiveness</h3>
+
+    <p>You may be asking, "What's the point of the colors?". Taking inspiration from fighting games, the colors have an effectiveness system:</p>
+    <!--Make it so that the text is the same color that it says!-->
+    <p><span style="color: red;">Red</span> beats <span style="color: green;">Green</span></p>
+    <p><span style="color: green;">Green</span> beats <span style="color: blue;">Blue</span></p>
+    <p><span style="color: blue;">Blue</span> beats <span style="color: red;">Red</span></p>
+    <p>If your card gets beaten by another color, that card's command gets completely CANCELED for that interaction, leaving you actionless. Take your opponent's deck into consideration when queueing your cards and use effectiveness to your advantage!</p>
+
+    <h3>Combos</h3>
+    <p>When you play 3 attacks in a row, you get a special effect depending on what color was played:</p>
+    <p>3 <span style="color: red;">red</span> cards will give your next attack 2 extra damage(don't miss!)</p>
+    <p>3 <span style="color: blue;">blue</span> cards will give you 3 extra stagger points</p>
+    <p>3 <span style="color: green;">green</span> cards will give you 3 extra prediction points</p>
+    <p>While combos offer great benefits, they leave you open for counters, and when countered your combo will break!</p>
+
+  </div>
+
+  <div class="section">
+
+      <h2>Limitations</h2>
+      <!--<p>this is where you'll talk about limitations of the tech demo, like the minimalistic AI, set cards, single weapon, etc. </p>-->
+      <p>Here's a small list of things that are didn't make it into the tech demo, or work a little differently than we envisioned for our full product.</p>
+
+      <ul class="list">
+          <li>
+              Weapons have not been implemented, so both players use a simplified version of our planned sword weapon, which offers increased range.
+          </li>
+          <li>
+              The AI opponent randomly assigns commands to seperate cards instead of entire groups, and there's no real logic to its play.
+          </li>
+          <li>
+              The player is able to assign the same command to multiple different colors when it's supposed to be restricted to one.
+          </li>
+          <li>
+              The tech demo has been built in HTML instead of Unity due to team restraints(The tech lead is currently more skilled in HTML and Javascript!).
+          </li>
+          <li>
+            Players would normal choose their 7 cards from a small deck of 9 cards, with three cards of each color. There are 3 fixed decks in the tech demo that get randomly chosen when the game resets.
+          </li>
+      </ul>
+
+  </div>
+
+  <p>Thank you for reading the instructions! Click <a href="index.html">here</a> to return to the main game, and we hope you enjoy!</p>
 
 </body>
 </html>

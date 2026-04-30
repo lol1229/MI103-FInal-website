@@ -1,4 +1,4 @@
-// You need to make dodging work for same color interactions, try and limit one type of command to one color, and try and add the combo system! Good luck bro :D
+//try and limit one type of command to one color, and try and add the combo system! Good luck bro :D
 
 let playerHp = 10;
 let enemyHp = 10;
@@ -7,6 +7,17 @@ let enemyStagger = 3;
 let prediction = 3;
 let distance = 2;
 let turnResolved = false;
+let reset = false;
+
+let redComboPlayer = 0;
+let playerCharge = false
+let blueComboPlayer = 0;
+let greenComboPlayer = 0;
+
+let redComboEnemy = 0;
+let enemyCharge = false;
+let blueComboEnemy = 0;
+let greenComboEnemy = 0;
 
 let selectedCard = null;
 
@@ -14,6 +25,16 @@ let playerCards = [
   { color: "Red", command: "Attack" },
   { color: "Red", command: "Attack" },
   { color: "Red", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Green", command: "Attack" },
+  { color: "Green", command: "Attack" }
+];
+
+const blueHand = [  
+  { color: "Red", command: "Attack" },
+  { color: "Red", command: "Attack" },
+  { color: "Blue", command: "Attack" },
   { color: "Blue", command: "Attack" },
   { color: "Blue", command: "Attack" },
   { color: "Green", command: "Attack" },
@@ -29,6 +50,18 @@ const startingHand = [
   { color: "Green", command: "Attack" },
   { color: "Green", command: "Attack" }
 ];
+
+const greenHand = [  
+  { color: "Red", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Blue", command: "Attack" },
+  { color: "Green", command: "Attack" },
+  { color: "Green", command: "Attack" },
+  { color: "Green", command: "Attack" }
+];
+
+let selectedHand = startingHand;
 
 let colorCommands = {
   Red: "Attack",
@@ -51,18 +84,36 @@ function createEnemyPlan() {
     enemyPlan.push({
       color: colors[Math.floor(Math.random() * colors.length)],
       command: commands[Math.floor(Math.random() * commands.length)],
-      revealed: true
+      revealed: false
     });
   }
 }
 
 function renderPlayerHand() {
   const hand = document.getElementById("playerHand");
+  const hands = [startingHand, blueHand, greenHand];
   hand.innerHTML = "";
+
+  if (reset) {
+    playerCards = [];
+    selectedHand = hands[Math.floor(Math.random() * hands.length)];
+    selectedHand.forEach(card => playerCards.push({ ...card }));
+    reset = false;
+  }
+
+  playerCards.forEach(card => {
+    card.command = colorCommands[card.color];
+  });
 
   if (queuedCards.length === 0) {
     playerCards = [];
-    startingHand.forEach(card => playerCards.push({ ...card }));
+    selectedHand.forEach(card => playerCards.push({ ...card }));
+    redComboPlayer = 0;
+    blueComboPlayer = 0;
+    greenComboPlayer = 0;
+    redComboEnemy = 0;
+    blueComboEnemy = 0;
+    greenComboEnemy = 0;
   }
 
   playerCards.forEach((card, index) => {
@@ -112,6 +163,7 @@ function renderPlayerHand() {
     };
 
     hand.appendChild(div);
+    return selectedHand;
   });
 }
 
@@ -203,11 +255,6 @@ function renderQueuedCards() {
   });
 }
 
-function resetPlayerHand() {
-  playerCards.length = 0;
-  startingHand.forEach(card => playerCards.push({ ...card }));
-}
-
 function renderEnemySlots() {
   const slots = document.getElementById("enemySlots");
   slots.innerHTML = "";
@@ -268,26 +315,26 @@ function resolveTurn() {
   const enemy = enemyPlan[0];
 
   let log = `You played ${player.color} ${colorCommands[player.color]}. `;
-  log += `Enemy played ${enemy.color} ${colorCommands[enemy.color]}. `;
+  log += `Enemy played ${enemy.color} ${enemy.command}. `;
 
   const result = checkCounter(player.color, enemy.color);
 
   if (result === "player") {
-    log += "Your color countered the enemy. Enemy command is canceled. ";
-    applyCommand(player, "player");
+    log += "Your color countered the enemy. Enemy command is canceled.";
+    log += " " + applyCommand(player, "player");
   } else if (result === "enemy") {
     log += "Enemy color countered you. Your command is canceled. ";
-    applyCommand(enemy, "enemy");
+    log += " " + applyCommand(enemy, "enemy");
   } else if (result === "player-staggered") {
     log += "You have been staggered! Your command is canceled.";
-    applyCommand(enemy, "enemy");
+    log += " " + applyCommand(enemy, "enemy");
   } else if (result === "enemy-staggered") {
     log += "The enemy has been staggered! Enemy command is canceled. ";
-    applyCommand(player, "player");
+    log += " " + applyCommand(player, "player");
   } else {
     log += "No color counter. Both commands resolve. ";
-    applyCommand(player, "player");
-    applyCommand(enemy, "enemy");
+    log += " " + applyCommand(player, "player");
+    log += " " + applyCommand(enemy, "enemy");
   }
 
   if (enemyHp <= 0 && playerHp <= 0) {
@@ -340,29 +387,102 @@ function checkCounter(playerColor, enemyColor) {
     return "enemy-staggered";
   }
   else {
-    if (playerColor === "Red" && enemyColor === "Blue") return "player";
-    if (playerColor === "Blue" && enemyColor === "Green") return "player";
-    if (playerColor === "Green" && enemyColor === "Red") return "player";
+    if (playerColor === "Red" && enemyColor === "Green") return "player";
+    if (playerColor === "Green" && enemyColor === "Blue") return "player";
+    if (playerColor === "Blue" && enemyColor === "Red") return "player";
 
-    if (enemyColor === "Red" && playerColor === "Blue") return "enemy";
-    if (enemyColor === "Blue" && playerColor === "Green") return "enemy";
-    if (enemyColor === "Green" && playerColor === "Red") return "enemy";
+    if (enemyColor === "Red" && playerColor === "Green") return "enemy";
+    if (enemyColor === "Green" && playerColor === "Blue") return "enemy";
+    if (enemyColor === "Blue" && playerColor === "Red") return "enemy";
 
     return "none";
   }
 }
 
 function applyCommand(card, owner) {
+  let log = "";
   const enemy = enemyPlan[0];
   const player = queuedCards[0];
   
   if (owner === "player") {
-    if (colorCommands[card.color] === "Attack") {
-      if (distance <= 3) {
-        enemyHp--;
-        enemyStagger--;
+    if (player.color === "Red") {
+      redComboPlayer++;
+      blueComboPlayer = 0;
+      greenComboPlayer = 0;
+      if (redComboPlayer >= 3) {
+        playerCharge = true;
+        log += "Red combo from the player! Next attack will be stronger.";
+        redComboPlayer = 0;
+      }
+    } 
+    else if (player.color === "Blue") {
+      blueComboPlayer++;
+      redComboPlayer = 0;
+      greenComboPlayer = 0;
+      if (blueComboPlayer >= 3) {
+        playerStagger += 3;
+        log += "Blue combo from the player! You gain 2 stagger.";
+        blueComboPlayer = 0;
+      }
+    } 
+    else if (player.color === "Green") {
+      greenComboPlayer++;
+      blueComboPlayer = 0;
+      redComboPlayer = 0;
+      if (greenComboPlayer >= 3) {
+        prediction += 3;
+        log += "Green combo from the player! You gain 2 predictions.";
+        greenComboPlayer = 0;
       }
     }
+  }
+
+  if (owner === "enemy") {
+    if (enemy.color === "Red") {
+      redComboEnemy++;
+      blueComboEnemy = 0;
+      greenComboEnemy = 0;
+      if (redComboEnemy >= 3) {
+        enemyCharge = true;
+        log += "Red combo from the enemy! Next attack will be stronger.";
+        redComboEnemy = 0;
+      }
+    } 
+    else if (enemy.color === "Blue") {
+      blueComboEnemy++;
+      redComboEnemy = 0;
+      greenComboEnemy = 0;
+      if (blueComboEnemy >= 3) {
+        enemyStagger += 3;
+        log += "Blue combo from the enemy! It gains 2 stagger.";
+        blueComboEnemy = 0;
+      }
+    } 
+    else if (enemy.color === "Green") {
+      greenComboEnemy++;
+      blueComboEnemy = 0;
+      redComboEnemy = 0;
+      if (greenComboEnemy >= 3) {
+        log += "Green combo from the enemy! It gains 2 predictions(useless...)";
+        greenComboEnemy = 0;
+      }
+    }
+  }
+
+  if (owner === "player") {
+    if (colorCommands[card.color] === "Attack") {
+      if (distance <= 3) {
+        if (playerCharge === true) {
+          enemyHp -= 3;
+          playerCharge = false;
+        } else {
+          enemyHp--;
+          enemyStagger--;
+        }
+      }
+      playerCharge = false;
+    }
+  
     if (colorCommands[card.color] === "Dodge") {
       if (distance <= 3) {
         if (enemy.command === "Attack") {
@@ -376,10 +496,17 @@ function applyCommand(card, owner) {
   if (owner === "enemy") {
     if (card.command === "Attack") {
       if (distance <= 3) {
-        playerHp--;
-        playerStagger--;
+        if (enemyCharge === true) {
+          playerHp -= 3;
+          enemyCharge = false;
+        } else {
+          playerHp--;
+          playerStagger--;
+        }
       }
+      enemyCharge = false;
     }
+
     if (card.command === "Dodge") {
       if (distance <= 3) {
         if (colorCommands[player.color] === "Attack") {
@@ -396,6 +523,8 @@ function applyCommand(card, owner) {
   if (card.command === "Move Backward") {
     distance = Math.min(5, distance + 1);
   }
+
+  return log;
 }
 
 function updateUI() {
@@ -427,9 +556,9 @@ function resetGame() {
     Green: "Attack"
   };
 
-  playerCards.forEach(card => {
-    card.command = colorCommands[card.color];
-  });
+  // Randomly select a hand from the three options
+
+  reset = true;
   queuedCards = [];
 
   createEnemyPlan();

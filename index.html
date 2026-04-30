@@ -4,46 +4,47 @@
   <meta charset="UTF-8" />
   <title>Color War</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <header>
   <h1>Color War</h1>
-  <p><a href="info.html">About this game</a></p>
-  <p>A prediction-based tactical color card combat prototype</p>
+  <h3>Instructions for the game, and tech demo limitations can be found <a href="info.html">here</a></h3>
 </header>
 
 <main>
   <section class="enemy-panel">
-    <h2>Enemy Plan:</h2>
-    <p class="hint">Use Prediction to reveal one enemy segment.</p>
+    <h1>Enemy Plan:</h1>
+    <h2 class="hint">Use Prediction to reveal one enemy segment.</h2>
     <div id="enemySlots" class="card-row"></div>
   </section>
 
   <section class="battlefield">
-    <div class="fighter">
-      <h3>Player</h3>
-      <p>HP: <span id="playerHp">10</span></p>
-      <p>Stagger: <span id="playerStagger">3</span></p>
-      <p>Prediction: <span id="prediction">3</span></p>
+    <div class="player-fighter">
+      <h2>Player</h2>
+      <h3>HP: <span id="playerHp">10</span></h3>
+      <h3>Stagger: <span id="playerStagger">3</span></h3>
+      <h3>Predictions: <span id="prediction">3</span></h3>
     </div>
 
     <div class="distance-box">
       <p>Distance</p>
-      <strong><span id="distance">2</span>m</strong>
+      <strong><span id="distance">2</span> m</strong>
     </div>
 
-    <div class="fighter">
-      <h3>Enemy</h3>
-      <p>HP: <span id="enemyHp">10</span></p>
-      <p>Stagger: <span id="enemyStagger">3</span></p>
-      <p>Status: Hidden</p>
+    <div class="enemy-fighter">
+      <h2>Enemy</h2>
+      <h3>HP: <span id="enemyHp">10</span></h3>
+      <h3>Stagger: <span id="enemyStagger">3</span></h3>
+      <h3>Predictions: Hidden</h3>
     </div>
   </section>
 
   <section class="player-panel">
-    <h2>Your Color Cards</h2>
-    <p class="hint">Choose a command for each color, then click a card to queue it.</p>
+    <h1>Your Color Cards</h1>
     <div id="queuedCards" class="queue-row"></div>
     <div id="playerHand" class="card-row"></div>
     <button class="queue-button" onclick="queueCard()">Queue Card</button>
@@ -60,7 +61,7 @@
     <div class="button-row">
       <button onclick="usePrediction()">Use Prediction</button>
       <button id="resolveTurn" onclick="resolveTurn()">Resolve Turn</button>
-      <button onclick="resetGame()">Reset</button>
+      <button onclick="resetGame()">Reset and Change Hands</button>
     </div>
   </section>
 

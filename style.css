@@ -7,19 +7,35 @@ body {
 
 header {
   text-align: center;
-  background: #1e1e1e;
+  background: #000000;
   color: white;
   padding: 36px 20px;
 }
 
 header h1 {
   margin: 0;
-  font-size: 36px;
+  font-size: 72px;
+  font-family: "Pixelify Sans", sans-serif;
+  color: #88ff55
 }
 
 header p {
   margin-top: 10px;
   color: #ddd;
+}
+
+header h3 {
+  margin-top: 10px;
+  color: #ccc;
+}
+
+a {
+  color: blue;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 main {
@@ -40,6 +56,12 @@ main {
   color: #FFD700;
 }
 
+.enemy-panel h1 {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 36px;
+  margin: 0;
+}
+
 .player-panel {
   background: linear-gradient(180deg, #b2f1ff, #5555b7, #03102f);
   border: 2px solid #222;
@@ -49,30 +71,36 @@ main {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
+.player-panel h1 {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 36px;
+  margin: 0;
+}
+
 .command-panel {
-  background: white;
+  background: #fff9e8;
   border: 2px solid #222;
   border-radius: 18px;
   padding: 22px;
   margin-bottom: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-#command {
-  color: red
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
 }
 
 .selection-panel {
-  background: white;
+  background: #fff9e8;
   border: 2px solid #222;
   border-radius: 18px;
   padding: 22px;
   margin-bottom: 24px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
 }
 
 .panel {
-  background: white;
+  background: #fff9e8;
   border: 2px solid #222;
   border-radius: 18px;
   padding: 22px;
@@ -104,15 +132,6 @@ main {
   flex-wrap: wrap;
   margin-top: 16px;
   color: #222
-}
-
-.command-row {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  color: #222
-  items-center;
 }
 
 .card {
@@ -178,32 +197,85 @@ main {
   gap: 20px;
 }
 
-.fighter {
+.player-fighter {
   flex: 1;
-  background: white;
-  border: 2px solid #222;
+  background: linear-gradient(90deg, #ffde59, #ff914d);
   border-radius: 18px;
   padding: 22px;
   text-align: center;
+  box-shadow: 
+  6px 6px 0px #FF00FF,
+  -6px -6px 0px #00FFFF;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
+}
+
+#playerHp {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#enemyHp {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#playerStagger {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#enemyStagger {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#prediction {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.enemy-fighter {
+  flex: 1;
+  background: linear-gradient(90deg, black, #c89116);
+  border-radius: 18px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 
+  6px 6px 0px #FF00FF,
+  -6px -6px 0px #00FFFF;
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
 }
 
 .distance-box {
   width: 160px;
-  background: #222;
-  color: white;
+  background: white;
+  color: black;
   border-radius: 18px;
   text-align: center;
   padding: 24px;
+  box-shadow: 
+  6px 6px 0px #FF00FF,
+  -6px -6px 0px #00FFFF;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
 }
 
 .distance-box strong {
+  font-family: "arial", sans-serif;
   font-size: 36px;
 }
 
 .selected-box {
   min-height: 50px;
-  background: #f6f6f6;
-  border-left: 6px solid #222;
+  background: #fff9e8;
   padding: 16px;
   margin-top: 12px;
 }
@@ -240,6 +312,40 @@ button:hover {
   background: #fff9e8;
 }
 
+.log-panel h2 {
+  margin: 0;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 24px;
+}
+
 #log {
   line-height: 1.6;
+}
+
+.info-page {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+  background: #f0f0f0;
+  color: #333;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff9e8;
+  border: 2px solid #222;
+  border-radius: 18px;
+  padding: 11px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  width: 50%;
+  text-align: center;
+  font-size: 20px;
+}
+
+li {
+  margin-bottom: 10px;
 }
